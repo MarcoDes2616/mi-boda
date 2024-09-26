@@ -24,8 +24,6 @@ export const fetchGuestById = async (id) => {
 
 // Create a new guest
 export const createGuest = async (guestData) => {
-  console.log(guestData);
-  
   try {
     const {data} = await axiosInstance.post('/guest', guestData);
     return data;
