@@ -18,6 +18,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import AddGuestModal from "../components/modals/AddGuestModal.jsx";
 import color from "../constants/color";
 import FloatingButton from "../components/general_components/FloatingButton.jsx";
+import Container from "../components/custon_components/Container.jsx";
 
 const GuestList = () => {
   const initialValues = {
@@ -93,7 +94,10 @@ const GuestList = () => {
         <View style={styles.row}>
           <View style={styles.contactInfo}>
             <FontAwesome name="phone" size={20} color={color.oliveGreen} />
-            <Text style={styles.detail}>{"  "}{item.phone}</Text>
+            <Text style={styles.detail}>
+              {"  "}
+              {item.phone}
+            </Text>
           </View>
           <View style={styles.column}>
             <TouchableOpacity onPress={() => handleWhatsApp(item.phone)}>
@@ -136,7 +140,7 @@ const GuestList = () => {
     handleCreateGuest,
   };
   return (
-    <View style={styles.container}>
+    <Container>
       <FloatingButton onPress={() => setModalVisible(true)} />
       <FlatList
         data={guests}
@@ -145,18 +149,13 @@ const GuestList = () => {
         contentContainerStyle={styles.list}
       />
       <AddGuestModal {...propsToModal} />
-    </View>
+    </Container>
   );
 };
 
 export default GuestList;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: color.ivory,
-    padding: 10,
-  },
   header: {
     fontSize: 24,
     fontWeight: "bold",
@@ -232,7 +231,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
-    color: color.ivory
+    color: color.ivory,
   },
   row: {
     flexDirection: "row",

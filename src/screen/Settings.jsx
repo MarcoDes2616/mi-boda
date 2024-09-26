@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Button, TextInput } from "react-native";
 import { fetchAllRoles, createRole } from "../api/role_api"; // Import your API functions
+import Container from "../components/custon_components/Container";
 
 const Settings = () => {
   const [roles, setRoles] = useState([]);
@@ -40,7 +41,7 @@ const Settings = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <Container>
       <Text style={styles.header}>Configuraciones</Text>
       
       <Text style={styles.subHeader}>Roles</Text>
@@ -69,7 +70,7 @@ const Settings = () => {
           <Button title="Crear Rol" onPress={handleCreateRole} />
         </View>
       )}
-    </View>
+    </Container>
   );
 };
 

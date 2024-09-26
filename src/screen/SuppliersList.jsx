@@ -1,20 +1,16 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
+import Container from "../components/custon_components/Container";
 const SuppliersList = () => {
   return (
-    <View style={styles.container}>
+    <Container>
       <Text>Pantalla de Proveedores</Text>
-    </View>
+    </Container>
   );
 };
 
 export default SuppliersList;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  
 });
