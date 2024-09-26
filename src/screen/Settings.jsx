@@ -14,7 +14,7 @@ const Settings = ({ navigation }) => {
   const renderOption = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate(item.navigateTo)}>
       <ImageBackground
-        source={item.img} // Reemplaza con la URL de tu imagen
+        source={item.img}
         style={styles.imageBackground}
         imageStyle={styles.image}
       >
@@ -71,65 +71,4 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
-
-// useEffect(() => {
-  //   fetchRoles();
-  // }, []);
-
-  // const fetchRoles = async () => {
-  //   try {
-  //     const response = await fetchAllRoles();
-  //     setRoles(response);
-  //   } catch (error) {
-  //     console.error("Error fetching roles:", error);
-  //   }
-  // };
-
-//const handleCreateRole = async () => {
-  //   if (!roleName) return; // Ensure the role name is not empty
-  //   try {
-  //     await createRole({ role_name: roleName });
-  //     setRoleName(""); // Clear input after creating
-  //     fetchRoles(); // Refresh the role list
-  //     setIsCreatingRole(false); // Hide the creation form after submission
-  //   } catch (error) {
-  //     console.error("Error creating role:", error);
-  //   }
-  // };
-
-  // const renderRole = ({ item }) => (
-  //   <View style={styles.roleCard}>
-  //     <Text style={styles.roleId}>ID: {item.id}</Text>
-  //     <Text style={styles.roleName}>{item.role_name}</Text>
-  //   </View>
-  // );
-
-  {/* <Text style={styles.header}>Configuraciones</Text>
-      <Text style={styles.subHeader}>Roles</Text> */}
-      
-      {/* <FlatList
-        data={roles}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderRole}
-        contentContainerStyle={styles.list}
-      /> */}
-
-      {/* Button to toggle role creation form */}
-      {/* <Button
-        title={isCreatingRole ? "Cancelar" : "Crear Nuevo Rol"}
-        onPress={() => setIsCreatingRole(!isCreatingRole)}
-      /> */}
-
-      {/* {isCreatingRole && (
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Nombre del rol"
-            value={roleName}
-            onChangeText={setRoleName}
-          />
-          <Button title="Crear Rol" onPress={handleCreateRole} />
-        </View>
-      )} */}
 
