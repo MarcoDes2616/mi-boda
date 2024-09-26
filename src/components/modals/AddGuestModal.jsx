@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, FlatList, TouchableOpacity, Linking, Alert, Modal, Button, TextInput } from "react-native";
+import { Text, View, StyleSheet, Modal, Button, TextInput } from "react-native";
 import {Picker} from "@react-native-picker/picker" //@react-native-picker/picker
-import { fetchAllGuests, sendInvitation, createGuest } from "../api/guest_api";
-import {fetchAllRoles} from "../api/role_api"
-import {fetchAllTitles} from "../api/title_api"
-import { FontAwesome } from '@expo/vector-icons';
+import {fetchAllRoles} from "../../api/role_api"
+import {fetchAllTitles} from "../../api/title_api"
 
 const AddGuestModal = ({modalVisible, setModalVisible, newGuest, setNewGuest, handleCreateGuest}) => {
     const [roles, setRoles] = useState([]);

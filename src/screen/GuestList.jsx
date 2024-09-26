@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, FlatList, TouchableOpacity, Linking, Alert, Modal, Button, TextInput } from "react-native";
-import {Picker} from "@react-native-picker/picker" //@react-native-picker/picker
-import { fetchAllGuests, sendInvitation, createGuest } from "../api/guest_api";
-import {fetchAllRoles} from "../api/role_api"
-import {fetchAllTitles} from "../api/title_api"
+import { Text, View, StyleSheet, FlatList, TouchableOpacity, Linking, Alert, Button } from "react-native";
+import { fetchAllGuests, sendInvitation, createGuest } from "../api/guest_api.js";
 import { FontAwesome } from '@expo/vector-icons';
+import AddGuestModal from "../components/modals/AddGuestModal.jsx";
 
 const GuestList = () => {
   const initialValues = { first_name: '', last_name: '', phone: '', email: '', roleId: null }
@@ -94,19 +92,18 @@ const GuestList = () => {
       </View>
     </View>
   );
-
+  const propsToModal = {modalVisible, setModalVisible, newGuest, setNewGuest, handleCreateGuest}
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Lista de Invitados</Text>
       <Button title="Agregar Invitado" onPress={() => setModalVisible(true)} />
-
-      {/* <FlatList
+      <FlatList
         data={guests}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderGuest}
         contentContainerStyle={styles.list}
-      /> */}
-
+      />
+      <AddGuestModal {...propsToModal} />
       
     </View>
   );

@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { Text } from "react-native";
-// import BottomMenu from "./src/components/general_components/BottomMenu";
+import BottomMenu from "./src/components/general_components/BottomMenu";
 
 export default function App() {
   return (
