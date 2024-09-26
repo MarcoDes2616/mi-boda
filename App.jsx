@@ -8,7 +8,7 @@ export default function App() {
     <NavigationContainer>
       <BottomMenu />
       {/* <Text>"hola"</Text> */}
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
     </NavigationContainer>
   );
 }
