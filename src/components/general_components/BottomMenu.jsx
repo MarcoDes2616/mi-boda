@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from 'react-native-vector-icons'; // Asegúrate de tener esta librería instalada
+import { Ionicons } from 'react-native-vector-icons';
 import GuestList from "../../screen/GuestList";
 import SuppliersList from "../../screen/SuppliersList";
 import Settings from "../../screen/Settings";

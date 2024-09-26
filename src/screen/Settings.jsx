@@ -1,65 +1,127 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Button, TextInput } from "react-native";
-import { fetchAllRoles, createRole } from "../api/role_api"; // Import your API functions
+import React from "react";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ImageBackground } from "react-native";
 import Container from "../components/custon_components/Container";
+import requirement from "../../assets/requirement.jpg"
+import roles from "../../assets/roles.png"
+import color from "../constants/color";
 
-const Settings = () => {
-  const [roles, setRoles] = useState([]);
-  const [roleName, setRoleName] = useState(""); // State for new role input
-  const [isCreatingRole, setIsCreatingRole] = useState(false); // State to toggle the role creation form
+const options = [
+  { id: '1', title: 'Roles', navigateTo: 'Roles', img: roles },
+  { id: '2', title: 'Requerimientos', navigateTo: 'Requerimientos', img: requirement },
+];
 
-  useEffect(() => {
-    fetchRoles();
-  }, []);
-
-  const fetchRoles = async () => {
-    try {
-      const response = await fetchAllRoles();
-      setRoles(response);
-    } catch (error) {
-      console.error("Error fetching roles:", error);
-    }
-  };
-
-  const handleCreateRole = async () => {
-    if (!roleName) return; // Ensure the role name is not empty
-    try {
-      await createRole({ role_name: roleName });
-      setRoleName(""); // Clear input after creating
-      fetchRoles(); // Refresh the role list
-      setIsCreatingRole(false); // Hide the creation form after submission
-    } catch (error) {
-      console.error("Error creating role:", error);
-    }
-  };
-
-  const renderRole = ({ item }) => (
-    <View style={styles.roleCard}>
-      <Text style={styles.roleId}>ID: {item.id}</Text>
-      <Text style={styles.roleName}>{item.role_name}</Text>
-    </View>
+const Settings = ({ navigation }) => {
+  const renderOption = ({ item }) => (
+    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate(item.navigateTo)}>
+      <ImageBackground
+        source={item.img} // Reemplaza con la URL de tu imagen
+        style={styles.imageBackground}
+        imageStyle={styles.image}
+      >
+        <Text style={styles.title}>{item.title}</Text>
+      </ImageBackground>
+    </TouchableOpacity>
   );
 
   return (
     <Container>
-      <Text style={styles.header}>Configuraciones</Text>
-      
-      <Text style={styles.subHeader}>Roles</Text>
-      
       <FlatList
+        data={options}
+        renderItem={renderOption}
+        keyExtractor={item => item.id}
+        contentContainerStyle={styles.listContainer}
+      />
+    </Container>
+  );
+};
+
+export default Settings;
+
+const styles = StyleSheet.create({
+  listContainer: {
+    padding: 20,
+  },
+  card: {
+    marginBottom: 15,
+    borderRadius: 10,
+    overflow: 'hidden',
+    elevation: 3, // Sombra en Android
+    shadowColor: '#000', // Sombra en iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  imageBackground: {
+    width: '100%',
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    color: color.wine, // Cambia según el color que prefieras
+    fontSize: 20,
+    fontWeight: 'bold',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    padding: 10,
+    borderRadius: 5
+  },
+  image: {
+    borderRadius: 10,
+  },
+});
+
+
+// useEffect(() => {
+  //   fetchRoles();
+  // }, []);
+
+  // const fetchRoles = async () => {
+  //   try {
+  //     const response = await fetchAllRoles();
+  //     setRoles(response);
+  //   } catch (error) {
+  //     console.error("Error fetching roles:", error);
+  //   }
+  // };
+
+//const handleCreateRole = async () => {
+  //   if (!roleName) return; // Ensure the role name is not empty
+  //   try {
+  //     await createRole({ role_name: roleName });
+  //     setRoleName(""); // Clear input after creating
+  //     fetchRoles(); // Refresh the role list
+  //     setIsCreatingRole(false); // Hide the creation form after submission
+  //   } catch (error) {
+  //     console.error("Error creating role:", error);
+  //   }
+  // };
+
+  // const renderRole = ({ item }) => (
+  //   <View style={styles.roleCard}>
+  //     <Text style={styles.roleId}>ID: {item.id}</Text>
+  //     <Text style={styles.roleName}>{item.role_name}</Text>
+  //   </View>
+  // );
+
+  {/* <Text style={styles.header}>Configuraciones</Text>
+      <Text style={styles.subHeader}>Roles</Text> */}
+      
+      {/* <FlatList
         data={roles}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderRole}
         contentContainerStyle={styles.list}
-      />
+      /> */}
 
       {/* Button to toggle role creation form */}
-      <Button
+      {/* <Button
         title={isCreatingRole ? "Cancelar" : "Crear Nuevo Rol"}
         onPress={() => setIsCreatingRole(!isCreatingRole)}
-      />
+      /> */}
 
-      {isCreatingRole && (
+      {/* {isCreatingRole && (
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -69,67 +131,5 @@ const Settings = () => {
           />
           <Button title="Crear Rol" onPress={handleCreateRole} />
         </View>
-      )}
-    </Container>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: "#f7f7f7",
-    padding: 10,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginVertical: 20,
-  },
-  subHeader: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginVertical: 10,
-  },
-  list: {
-    width: "100%",
-    paddingBottom: 20,
-  },
-  roleCard: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 15,
-    marginVertical: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-    width: "100%",
-  },
-  roleId: {
-    fontSize: 16,
-    color: "#555",
-  },
-  roleName: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    marginRight: 10,
-    width: "70%",
-  },
-});
-
-export default Settings;
+      )} */}
 

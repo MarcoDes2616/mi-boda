@@ -1,13 +1,24 @@
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
-import { Text } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomMenu from "./src/components/general_components/BottomMenu";
+import Requirements from "./src/screen/Requirements";
+import Roles from "./src/screen/Roles";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <BottomMenu />
-      {/* <Text>"hola"</Text> */}
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={BottomMenu}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="Roles" component={Roles} />
+        <Stack.Screen name="Requerimientos" component={Requirements} />
+      </Stack.Navigator>
       <StatusBar style="dark" />
     </NavigationContainer>
   );
