@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Button, FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, FlatList, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import Container from "../components/custon_components/Container";
-import { createRequirement, fetchAllRequirements } from "../api/requirement_api";
+import { createRequirement, deleteRequirement, fetchAllRequirements } from "../api/requirement_api";
+import { FontAwesome } from "@expo/vector-icons";
+import color from "../constants/color";
 
 const Requirements = () => {
   const [requirements, setRequirements] = useState([]);
@@ -33,9 +35,24 @@ const Requirements = () => {
     }
   };
 
+  const handleDeleteRequirement = async (id) => {
+    try {
+      await deleteRequirement(id); // Llama al método para eliminar
+      fetchRequirements(); // Actualiza la lista de roles después de eliminar
+    } catch (error) {
+      console.error("Error deleting requirement:", error);
+    }
+  };
+
+
   const renderRequirements = ({ item }) => (
     <View style={styles.roleCard}>
       <Text style={styles.roleName}>{item.requirement}</Text>
+      <View style={styles.trash}>
+        <TouchableOpacity onPress={() => handleDeleteRequirement(item.id)}>
+          <FontAwesome name="trash" size={24} color={color.wine} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -93,6 +110,8 @@ const styles = StyleSheet.create({
       shadowRadius: 10,
       elevation: 5,
       width: "100%",
+      flexDirection: "row",
+      justifyContent: "space-between"
     },
     roleId: {
       fontSize: 16,

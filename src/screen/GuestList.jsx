@@ -20,7 +20,6 @@ import AddGuestModal from "../components/modals/AddGuestModal.jsx";
 import color from "../constants/color";
 import FloatingButton from "../components/general_components/FloatingButton.jsx";
 import Container from "../components/custon_components/Container.jsx";
-import RoleFilter from "../components/general_components/RoleFilter.jsx";
 import ControlPanel from "../components/general_components/ControlPanel.jsx";
 
 const GuestList = () => {
@@ -30,6 +29,7 @@ const GuestList = () => {
     phone: "",
     email: "",
     roleId: null,
+    titleId: null
   };
   const [guests, setGuests] = useState([]);
 
@@ -43,8 +43,6 @@ const GuestList = () => {
   }, []);
 
   useEffect(() => {
-    console.log("ejecutado");
-    
     fetchData(roleId)
   }, [roleId])
 
