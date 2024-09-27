@@ -24,7 +24,7 @@ export default ControlPanel;
 const styles = StyleSheet.create({
     controlBar: {
       flexDirection: "row",
-      justifyContent: "space-around",
+      justifyContent: "flex-end",
       padding: 10,
       backgroundColor: color.ivory,
     }, 

@@ -190,12 +190,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 20,
   },
-  controlBar: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10,
-    backgroundColor: color.ivory,
-  },
   list: {
     paddingBottom: 20,
   },

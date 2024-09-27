@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, Picker, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import {Picker} from "@react-native-picker/picker"
+import color from "../../constants/color"
 
 const RoleFilter = ({ setRoleId }) => {
   const [selectedRole, setSelectedRole] = useState();
 
   const roles = [
-    {id: "", role_name: "Todos"},
+    { id: "", role_name: "Todos" },
     { id: 1, role_name: "Dama de honor" },
     { id: 2, role_name: "Padrino (a) de ceremonia" },
     { id: 3, role_name: "Padrino civil" },
@@ -22,35 +24,53 @@ const RoleFilter = ({ setRoleId }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Seleccione un rol:</Text>
-      <Picker
-        selectedValue={selectedRole}
-        onValueChange={handleRoleChange}
-        style={styles.picker}
-      >
-        <Picker.Item label="Seleccionar rol" value={null} />
-        {roles.map(role => (
-          <Picker.Item key={role.id} label={role.role_name} value={role.id} />
-        ))}
-      </Picker>
+      <Text style={styles.label}>Filtrar por rol:</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={selectedRole}
+          onValueChange={handleRoleChange}
+          style={styles.picker}
+          mode="dropdown"
+        >
+          <Picker.Item label="Seleccionar rol" value={null} />
+          {roles.map(role => (
+            <Picker.Item key={role.id} label={role.role_name} value={role.id} />
+          ))}
+        </Picker>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    backgroundColor: '#f8f8f8',
-    borderRadius: 8
+    padding: 8,
+    backgroundColor: color.palePink,
+    borderRadius: 12,
+    marginBottom: 10,
+    width: '100%',
+    maxWidth: 300,
+    alignSelf: 'center'
   },
   label: {
-    marginBottom: 8,
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#333',
+    marginBottom: 6,
+    textAlign: 'center'
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    height: 40,
+    justifyContent: 'center',
   },
   picker: {
-    height: 50,
-    backgroundColor: '#fff'
+    height: 40,
+    width: '100%',
   }
 });
 
