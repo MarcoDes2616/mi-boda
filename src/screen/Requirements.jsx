@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Button, FlatList, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Button, FlatList, StyleSheet, Text, TextInput, View, TouchableOpacity, Modal } from "react-native";
 import Container from "../components/custon_components/Container";
 import { createRequirement, deleteRequirement, fetchAllRequirements } from "../api/requirement_api";
 import { FontAwesome } from "@expo/vector-icons";
 import color from "../constants/color";
+import { createSupplier } from "../api/supplier_api";
 
 const Requirements = () => {
+  const initialValuesProvider = {
+    full_name: "",
+    phone: "",
+    price: ""
+  }
   const [requirements, setRequirements] = useState([]);
-  const [isCreatingRequirement, setIsCreatingRequirement] = useState(false)
-  const [requirement, setRequirement] = useState("")
+  const [isCreatingRequirement, setIsCreatingRequirement] = useState(false);
+  const [requirement, setRequirement] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedRequirement, setSelectedRequirement] = useState(null);
+  const [providerData, setProviderData] = useState(initialValuesProvider);
 
   useEffect(() => {
     fetchRequirements();
@@ -19,41 +28,57 @@ const Requirements = () => {
       const response = await fetchAllRequirements();
       setRequirements(response);
     } catch (error) {
-      console.error("Error fetching roles:", error);
+      console.error("Error fetching requirements:", error);
     }
   };
 
   const handleCreateRequirement = async () => {
-    if (!requirement) return; // Ensure the role name is not empty
+    if (!requirement) return;
     try {
-      await createRequirement({ requirement: requirement });
-      setRequirement(""); // Clear input after creating
-      fetchRequirements(); // Refresh the role list
-      setIsCreatingRequirement(false); // Hide the creation form after submission
+      await createRequirement({ requirement });
+      setRequirement("");
+      fetchRequirements();
+      setIsCreatingRequirement(false);
     } catch (error) {
-      console.error("Error creating role:", error);
+      console.error("Error creating requirement:", error);
     }
   };
 
   const handleDeleteRequirement = async (id) => {
     try {
-      await deleteRequirement(id); // Llama al método para eliminar
-      fetchRequirements(); // Actualiza la lista de roles después de eliminar
+      await deleteRequirement(id);
+      fetchRequirements();
     } catch (error) {
       console.error("Error deleting requirement:", error);
     }
   };
 
+  const handleAssignProvider = (requirement) => {
+    setSelectedRequirement(requirement);
+    setModalVisible(true);
+  };
+
+  const handleSaveProvider = async() => {
+    await createSupplier({ 
+      requirementId: selectedRequirement.id, 
+     ...providerData 
+     })
+    fetchRequirements()
+    setModalVisible(false);
+    setProviderData(initialValuesProvider);
+  };
 
   const renderRequirements = ({ item }) => (
-    <View style={styles.roleCard}>
-      <Text style={styles.roleName}>{item.requirement}</Text>
-      <View style={styles.trash}>
-        <TouchableOpacity onPress={() => handleDeleteRequirement(item.id)}>
-          <FontAwesome name="trash" size={24} color={color.wine} />
-        </TouchableOpacity>
+    <TouchableOpacity onPress={() => handleAssignProvider(item)}>
+      <View style={styles.roleCard}>
+        <Text style={styles.roleName}>{item.requirement}</Text>
+        <View style={styles.trash}>
+          <TouchableOpacity onPress={() => handleDeleteRequirement(item.id)}>
+            <FontAwesome name="trash" size={24} color={color.wine} />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -65,7 +90,7 @@ const Requirements = () => {
         contentContainerStyle={styles.list}
       />
       <Button
-        title={isCreatingRequirement ? "Cancelar" : "Crear Nuevo requerimiento"}
+        title={isCreatingRequirement ? "Cancelar" : "Crear Nuevo Requerimiento"}
         onPress={() => setIsCreatingRequirement(!isCreatingRequirement)}
       />
       {isCreatingRequirement && (
@@ -79,6 +104,44 @@ const Requirements = () => {
           <Button title="Crear Requerimiento" onPress={handleCreateRequirement} />
         </View>
       )}
+
+      {/* Modal para asignar proveedor */}
+      {selectedRequirement && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Asignar Proveedor para: {selectedRequirement.requirement}</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Nombre Completo"
+                value={providerData.full_name}
+                onChangeText={(text) => setProviderData({ ...providerData, full_name: text })}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Teléfono"
+                value={providerData.phone}
+                onChangeText={(text) => setProviderData({ ...providerData, phone: text })}
+                keyboardType="phone-pad"
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Precio"
+                value={providerData.price}
+                onChangeText={(text) => setProviderData({ ...providerData, price: text })}
+                keyboardType="numeric"
+              />
+              <Button title="Guardar Proveedor" onPress={handleSaveProvider} />
+              <Button title="Cancelar" onPress={() => setModalVisible(false)} color={color.wine} />
+            </View>
+          </View>
+        </Modal>
+      )}
     </Container>
   );
 };
@@ -86,53 +149,60 @@ const Requirements = () => {
 export default Requirements;
 
 const styles = StyleSheet.create({
-    header: {
-      fontSize: 24,
-      fontWeight: "bold",
-      marginVertical: 20,
-    },
-    subHeader: {
-      fontSize: 20,
-      fontWeight: "bold",
-      marginVertical: 10,
-    },
-    list: {
-      width: "100%",
-      paddingBottom: 20,
-    },
-    roleCard: {
-      backgroundColor: "#fff",
-      borderRadius: 10,
-      padding: 15,
-      marginVertical: 10,
-      shadowColor: "#000",
-      shadowOpacity: 0.1,
-      shadowRadius: 10,
-      elevation: 5,
-      width: "100%",
-      flexDirection: "row",
-      justifyContent: "space-between"
-    },
-    roleId: {
-      fontSize: 16,
-      color: "#555",
-    },
-    roleName: {
-      fontSize: 18,
-      fontWeight: "bold",
-      color: "#333",
-    },
-    inputContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginTop: 20,
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: "#ccc",
-      borderRadius: 5,
-      padding: 10,
-      marginRight: 10,
-      width: "70%",
-    },
-  });
+  list: {
+    width: "100%",
+    paddingBottom: 20,
+  },
+  roleCard: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  roleName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 10,
+    width: "70%",
+  },
+  trash: {
+    justifyContent: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+});
