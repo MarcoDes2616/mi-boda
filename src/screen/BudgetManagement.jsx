@@ -33,8 +33,8 @@ const BudgetManagement = () => {
         try {
             const requirementsData = await fetchAllRequirementsByPrice();
             setRequirements(requirementsData);
-            const totalCost = requirementsData.reduce((sum, req) => sum + req.price, 0);
-            setTotalRequirementCost(totalCost || 0);
+            const totalCost = requirementsData.reduce((sum, req) => sum + +req.price, 0);
+            setTotalRequirementCost(totalCost);
         } catch (error) {
             console.error('Error fetching requirements:', error);
             setTotalRequirementCost(0);
