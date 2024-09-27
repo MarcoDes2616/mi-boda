@@ -13,6 +13,7 @@ import {
   fetchAllGuests,
   sendInvitation,
   createGuest,
+  deleteGuest,
 } from "../api/guest_api.js";
 import { FontAwesome } from "@expo/vector-icons";
 import AddGuestModal from "../components/modals/AddGuestModal.jsx";
@@ -78,6 +79,15 @@ const GuestList = () => {
     }
   };
 
+  const handleDeleteGuest = async (id) => {
+    try {
+      await deleteGuest(id);
+      fetchData();
+    } catch (error) {
+      Alert.alert("Error", "Hubo un error al agregar el invitado.");
+    }
+  };
+
   const renderGuest = ({ item }) => (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -126,8 +136,15 @@ const GuestList = () => {
       </View>
       {/* Botones de Acción */}
       <View style={styles.actionsContainer}>
-        <FontAwesome name="barcode" size={40} color={color.wine} />
-        <FontAwesome name="barcode" size={40} color={color.wine} />
+        <View style={styles.barCode}>
+          <FontAwesome name="barcode" size={40} color={color.wine} />
+          <FontAwesome name="barcode" size={40} color={color.wine} />
+        </View>
+        <View style={styles.trash}>
+          <TouchableOpacity onPress={() => handleDeleteGuest(item.id)}>
+            <FontAwesome name="trash" size={24} color={color.sageGreen} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -164,6 +181,20 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingBottom: 20,
+  },
+  barCode: {
+    width: "85%",
+    flexDirection: "row",
+    justifyContent: "center"
+  },
+  trash:  {
+    flexDirection: "row",
+    backgroundColor: color.oliveGreen,
+    width: "15%",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+    borderBottomRightRadius: 8
   },
   card: {
     borderRadius: 8,
@@ -221,7 +252,7 @@ const styles = StyleSheet.create({
   },
   actionsContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#fff",
     borderBottomLeftRadius: 8,
