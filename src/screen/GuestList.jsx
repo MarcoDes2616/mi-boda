@@ -20,6 +20,8 @@ import AddGuestModal from "../components/modals/AddGuestModal.jsx";
 import color from "../constants/color";
 import FloatingButton from "../components/general_components/FloatingButton.jsx";
 import Container from "../components/custon_components/Container.jsx";
+import RoleFilter from "../components/general_components/RoleFilter.jsx";
+import ControlPanel from "../components/general_components/ControlPanel.jsx";
 
 const GuestList = () => {
   const initialValues = {
@@ -33,14 +35,22 @@ const GuestList = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [newGuest, setNewGuest] = useState(initialValues);
+  const [roleId, setRoleId] = useState("")
+
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
+  useEffect(() => {
+    console.log("ejecutado");
+    
+    fetchData(roleId)
+  }, [roleId])
+
+  const fetchData = async (roleId) => {
     try {
-      const response = await fetchAllGuests();
+      const response = await fetchAllGuests(roleId);
       setGuests(response);
     } catch (error) {
       console.error("Error fetching guests:", error);
@@ -158,7 +168,8 @@ const GuestList = () => {
   };
   return (
     <Container>
-      <FloatingButton onPress={() => setModalVisible(true)} />
+      <ControlPanel setRoleId={setRoleId} />
+      <FloatingButton count={guests.length} onPress={() => setModalVisible(true)} />
       <FlatList
         data={guests}
         keyExtractor={(item) => item.id.toString()}
@@ -178,6 +189,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 20,
+  },
+  controlBar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10,
+    backgroundColor: color.ivory,
   },
   list: {
     paddingBottom: 20,

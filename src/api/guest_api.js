@@ -1,9 +1,11 @@
 import axiosInstance from './axios';
 
 // Fetch all guests
-export const fetchAllGuests = async () => {
+export const fetchAllGuests = async (roleId) => {
+  console.log(roleId);
+  
   try {
-    const {data} = await axiosInstance.get('/guest');
+    const {data} = await axiosInstance.get(`/guest${roleId ? "?roleId="+roleId : ""}`);
     return data;
   } catch (error) {
     console.error('Error fetching guests:', error);
