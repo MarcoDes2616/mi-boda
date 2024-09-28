@@ -48,20 +48,20 @@ export const updateRequirement = async (id, requirementData) => {
     const { data } = await axiosInstance.put(
       `/requirement/${id}`,
       requirementData
-    ); // Asegúrate de que la ruta es correcta
-    return data; // Asumiendo que la API devuelve el requerimiento actualizado
+    ); 
+    return data;
   } catch (error) {
     console.error(`Error updating requirement with ID ${id}:`, error);
-    throw error; // Propaga el error para manejarlo en el componente
+    throw error; 
   }
 };
 
 // Delete a requirement by ID
 export const deleteRequirement = async (id) => {
   try {
-    await axiosInstance.delete(`/requirement/${id}`); // Asegúrate de que la ruta es correcta
+    await axiosInstance.delete(`/requirement/${id}`);
   } catch (error) {
     console.error(`Error deleting requirement with ID ${id}:`, error);
-    throw error; // Propaga el error para manejarlo en el componente
+    throw error;
   }
 };

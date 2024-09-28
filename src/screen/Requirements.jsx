@@ -105,7 +105,6 @@ const Requirements = () => {
         </View>
       )}
 
-      {/* Modal para asignar proveedor */}
       {selectedRequirement && (
         <Modal
           animationType="slide"

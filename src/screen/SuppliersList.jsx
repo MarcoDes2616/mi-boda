@@ -20,7 +20,7 @@ const SuppliersList = () => {
   }
   const handleEdit = async(id) => {
     try {
-      await updateSupplier(newGuest);
+      await updateSupplier(id);
       fetchSupplier();
     } catch (error) {
       Alert.alert("Error", "Hubo un error al agregar el invitado.");
@@ -29,7 +29,7 @@ const SuppliersList = () => {
 
   const handleDelete = async(id) => {
     try {
-      await deleteSupplier(newGuest);
+      await deleteSupplier(id);
       fetchSupplier();
     } catch (error) {
       Alert.alert("Error", "Hubo un error al agregar el invitado.");

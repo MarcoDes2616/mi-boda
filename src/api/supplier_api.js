@@ -25,11 +25,11 @@ export const fetchSupplierById = async (id) => {
 // Create a new supplier
 export const createSupplier = async (supplierData) => {
   try {
-    const { data } = await axiosInstance.post('/supplier', supplierData); // Asegúrate de que la ruta es correcta
-    return data; // Asumiendo que la API devuelve el proveedor creado
+    const { data } = await axiosInstance.post('/supplier', supplierData); 
+    return data; 
   } catch (error) {
     console.error("Error creating supplier:", error);
-    throw error; // Propaga el error para manejarlo en el componente
+    throw error; 
   }
 };
 
@@ -47,9 +47,9 @@ export const updateSupplier = async (id, supplierData) => {
 // Delete a supplier by ID
 export const deleteSupplier = async (id) => {
   try {
-    await axiosInstance.delete(`/supplier/${id}`); // Asegúrate de que la ruta es correcta
+    await axiosInstance.delete(`/supplier/${id}`);
   } catch (error) {
     console.error(`Error deleting supplier with ID ${id}:`, error);
-    throw error; // Propaga el error para manejarlo en el componente
+    throw error;
   }
 };
