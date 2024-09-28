@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, StyleSheet, Modal, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, StyleSheet, Modal, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { fetchBudget, createBudget } from '../api/budget_api';
-import {fetchAllRequirementsByPrice} from "../api/requirement_api"
-import { PieChart } from 'react-native-chart-kit';
+import { fetchAllRequirementsByPrice } from "../api/requirement_api";
 import Container from '../components/custon_components/Container';
 import color from '../constants/color';
 import { FontAwesome } from "@expo/vector-icons";
+
+const screenWidth = Dimensions.get('window').width;
 
 const BudgetManagement = () => {
     const [totalBudget, setTotalBudget] = useState(0);
@@ -41,24 +42,7 @@ const BudgetManagement = () => {
         }
     };
 
-    const budgetExecution = totalBudget ? (totalRequirementCost / totalBudget) * 100 : 0;
-
-    const data = [
-        {
-            name: 'Usado',
-            population: totalRequirementCost,
-            color: color.sageGreen,
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-        },
-        {
-            name: 'Restante',
-            population: totalBudget - totalRequirementCost,
-            color: color.wine,
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 15,
-        },
-    ];
+    const budgetExecution = totalBudget ? ((totalRequirementCost / totalBudget) * 100).toFixed(2) : 0;
 
     const renderRequirement = ({ item }) => (
         <View style={styles.requirementItem}>
@@ -82,31 +66,19 @@ const BudgetManagement = () => {
 
     return (
         <Container>
-            <Text style={styles.header}>Ejecución de presupuesto: {budgetExecution}%</Text>
+            <Text style={styles.header}>Presupuesto ejecutado: {budgetExecution}%</Text>
 
             {totalBudget > 0 ? (
-                <PieChart
-                    data={data}
-                    width={300}
-                    height={220}
-                    chartConfig={{
-                        backgroundColor: '#fff',
-                        backgroundGradientFrom: '#fff',
-                        backgroundGradientTo: '#fff',
-                        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                    }}
-                    accessor="population"
-                    backgroundColor="transparent"
-                    paddingLeft="15"
-                    absolute
-                />
+                <View style={styles.progressBarContainer}>
+                    <View style={[styles.progressBar, { width: `${budgetExecution}%` }]} />
+                </View>
             ) : (
                 <Text style={styles.noDataText}>
                     El presupuesto no ha sido definido.
                 </Text>
             )}
 
-            <Text style={styles.subHeader}>Total de Requerimientos {totalRequirementCost}$</Text>
+            <Text style={styles.subHeader}>Total de Requerimientos: {totalRequirementCost}$</Text>
             {requirements.length > 0 ? (
                 <FlatList
                     data={requirements}
@@ -243,5 +215,18 @@ const styles = StyleSheet.create({
     cancelButton: {
         backgroundColor: '#f44336',
         marginTop: 10,
+    },
+    progressBarContainer: {
+        width: '100%',
+        height: 20,
+        backgroundColor: '#e0e0e0',
+        borderRadius: 10,
+        overflow: 'hidden',
+        marginBottom: 20,
+    },
+    progressBar: {
+        height: '100%',
+        backgroundColor: color.sageGreen,
+        borderRadius: 10,
     },
 });
