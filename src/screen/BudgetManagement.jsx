@@ -11,8 +11,8 @@ const BudgetManagement = () => {
     const [totalBudget, setTotalBudget] = useState(0);
     const [requirements, setRequirements] = useState([]);
     const [totalRequirementCost, setTotalRequirementCost] = useState(0);
-    const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
-    const [amount, setAmount] = useState(''); // State for input value
+    const [modalVisible, setModalVisible] = useState(false);
+    const [amount, setAmount] = useState('');
 
     useEffect(() => {
         fetchBudgetData();
