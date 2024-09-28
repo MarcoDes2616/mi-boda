@@ -117,15 +117,12 @@ const BudgetManagement = () => {
                 <Text style={styles.noDataText}>No hay requerimientos registrados.</Text>
             )}
 
-            {/* Floating Button */}
             <TouchableOpacity 
                 style={styles.floatingButton} 
                 onPress={() => setModalVisible(true)}
             >
                 <FontAwesome name="plus" size={24} color={color.palePink} />
             </TouchableOpacity>
-
-            {/* Modal for Budget Input */}
             <Modal
                 animationType="slide"
                 transparent={true}
