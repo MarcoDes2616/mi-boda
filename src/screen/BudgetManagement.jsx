@@ -5,7 +5,7 @@ import {fetchAllRequirementsByPrice} from "../api/requirement_api"
 import { PieChart } from 'react-native-chart-kit';
 import Container from '../components/custon_components/Container';
 import color from '../constants/color';
-import { MaterialIcons } from '@expo/vector-icons'; // Importing Material Icons for the floating button
+import { FontAwesome } from "@expo/vector-icons";
 
 const BudgetManagement = () => {
     const [totalBudget, setTotalBudget] = useState(0);
@@ -22,7 +22,7 @@ const BudgetManagement = () => {
     const fetchBudgetData = async () => {
         try {
             const response = await fetchBudget();
-            setTotalBudget(response.totalBudget || 0);
+            setTotalBudget(response.totalBudget);
         } catch (error) {
             console.error('Error fetching budget:', error);
             setTotalBudget(0);
@@ -102,9 +102,7 @@ const BudgetManagement = () => {
                 />
             ) : (
                 <Text style={styles.noDataText}>
-                    {totalBudget === 0
-                        ? 'El presupuesto no ha sido definido.'
-                        : 'No se han registrado requerimientos con precio aún.'}
+                    El presupuesto no ha sido definido.
                 </Text>
             )}
 
@@ -124,7 +122,7 @@ const BudgetManagement = () => {
                 style={styles.floatingButton} 
                 onPress={() => setModalVisible(true)}
             >
-                <MaterialIcons name="add" size={24} color="white" />
+                <FontAwesome name="plus" size={24} color={color.palePink} />
             </TouchableOpacity>
 
             {/* Modal for Budget Input */}
