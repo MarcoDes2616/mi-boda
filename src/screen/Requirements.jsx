@@ -1,36 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, FlatList, StyleSheet, Text, TextInput, View, TouchableOpacity, Modal } from "react-native";
 import Container from "../components/custon_components/Container";
-import { createRequirement, deleteRequirement, fetchAllRequirements } from "../api/requirement_api";
+import { createRequirement, deleteRequirement } from "../api/requirement_api";
 import { FontAwesome } from "@expo/vector-icons";
 import color from "../constants/color";
-import { createSupplier } from "../api/supplier_api";
+import { AppContext } from "../context/AppContext";
 
 const Requirements = () => {
-  const initialValuesProvider = {
-    full_name: "",
-    phone: "",
-    price: ""
-  }
-  const [requirements, setRequirements] = useState([]);
+
+  const {
+    handleSaveProvider,
+    requirements,
+    fetchRequirements,
+    setSelectedRequirement,
+    selectedRequirement,
+    providerData, 
+    setProviderData,
+    modalVisible,
+    setModalVisible
+  } = useContext(AppContext)
+ 
   const [isCreatingRequirement, setIsCreatingRequirement] = useState(false);
-  const [requirement, setRequirement] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedRequirement, setSelectedRequirement] = useState(null);
-  const [providerData, setProviderData] = useState(initialValuesProvider);
+  const [requirement, setRequirement] = useState("")
+  
 
   useEffect(() => {
     fetchRequirements();
   }, []);
 
-  const fetchRequirements = async () => {
-    try {
-      const response = await fetchAllRequirements();
-      setRequirements(response);
-    } catch (error) {
-      console.error("Error fetching requirements:", error);
-    }
-  };
 
   const handleCreateRequirement = async () => {
     if (!requirement) return;
@@ -58,15 +55,7 @@ const Requirements = () => {
     setModalVisible(true);
   };
 
-  const handleSaveProvider = async() => {
-    await createSupplier({ 
-      requirementId: selectedRequirement.id, 
-     ...providerData 
-     })
-    fetchRequirements()
-    setModalVisible(false);
-    setProviderData(initialValuesProvider);
-  };
+  
 
   const renderRequirements = ({ item }) => (
     <TouchableOpacity onPress={() => handleAssignProvider(item)}>

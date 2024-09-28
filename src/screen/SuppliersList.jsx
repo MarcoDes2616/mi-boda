@@ -1,40 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Text, View, Button, FlatList, StyleSheet } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { FlatList, StyleSheet } from "react-native";
 import Container from "../components/custon_components/Container";
-import {deleteSupplier, updateSupplier, fetchAllSuppliers} from "../api/supplier_api"
 import SupplierCard from "../components/general_components/SupplierCard";
+import { AppContext } from "../context/AppContext";
 
 const SuppliersList = () => {
-  const [suppliers, SetSuppliers] = useState([])
+  const {suppliers,
+    fetchSupplier,
+    handleEdit,
+    handleDelete} = useContext(AppContext)
+    
   useEffect(() => {
     fetchSupplier()
   }, [])
 
-  const fetchSupplier = async() => {
-    try {
-      const response = await fetchAllSuppliers();
-      SetSuppliers(response);
-    } catch (error) {
-      console.error("Error fetching guests:", error);
-    }
-  }
-  const handleEdit = async(id) => {
-    try {
-      await updateSupplier(id);
-      fetchSupplier();
-    } catch (error) {
-      Alert.alert("Error", "Hubo un error al agregar el invitado.");
-    }
-  };
-
-  const handleDelete = async(id) => {
-    try {
-      await deleteSupplier(id);
-      fetchSupplier();
-    } catch (error) {
-      Alert.alert("Error", "Hubo un error al agregar el invitado.");
-    }
-  };
+  
 
   return (
     <Container>
