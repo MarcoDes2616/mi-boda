@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
 import { createSupplier, deleteSupplier, fetchAllSuppliers, updateSupplier } from "../api/supplier_api";
-import { fetchAllRequirements } from "../api/requirement_api";
+import { fetchAllRequirements, fetchAllRequirementsByPrice } from "../api/requirement_api";
 
 export const AppContext = createContext();
 
@@ -12,6 +12,8 @@ export const AppProvider = ({ children }) => {
   }
   const [suppliers, SetSuppliers] = useState([]);
   const [requirements, setRequirements] = useState([]);
+  const [requirementOrdered, SetRequirementOrdered] = useState([])
+  const [totalRequirementCost, setTotalRequirementCost] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedRequirement, setSelectedRequirement] = useState(null);
   const [providerData, setProviderData] = useState(initialValuesProvider);
@@ -62,6 +64,18 @@ export const AppProvider = ({ children }) => {
     setProviderData(initialValuesProvider);
   };
 
+  const fetchRequirementsData = async () => {
+    try {
+        const requirementsData = await fetchAllRequirementsByPrice();
+        SetRequirementOrdered(requirementsData);
+        const totalCost = requirementsData.reduce((sum, req) => sum + +req.price, 0);
+        setTotalRequirementCost(totalCost);
+    } catch (error) {
+        console.error('Error fetching requirements:', error);
+        setTotalRequirementCost(0);
+    }
+};
+
   const data = {
     suppliers,
     SetSuppliers,
@@ -76,7 +90,10 @@ export const AppProvider = ({ children }) => {
     providerData, 
     setProviderData,
     modalVisible,
-    setModalVisible
+    setModalVisible,
+    fetchRequirementsData,
+    requirementOrdered,
+    totalRequirementCost
   };
   return <AppContext.Provider value={data}>{children}</AppContext.Provider>;
 };
