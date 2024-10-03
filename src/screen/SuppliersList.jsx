@@ -1,20 +1,29 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import Container from "../components/custon_components/Container";
 import SupplierCard from "../components/general_components/SupplierCard";
 import { AppContext } from "../context/AppContext";
+import { createNote } from "../api/note_api";
 
 const SuppliersList = () => {
   const {suppliers,
     fetchSupplier,
     handleEdit,
     handleDelete} = useContext(AppContext)
+  
+    const [comment, setComment] = useState("")
     
   useEffect(() => {
     fetchSupplier()
   }, [])
 
-  
+  const handleAddComment = async (supplierId) => {
+    if (comment.trim()) {
+      await createNote({supplierId, comment});
+      fetchSupplier();
+      setComment("")
+    }
+  };
 
   return (
     <Container>
@@ -26,6 +35,9 @@ const SuppliersList = () => {
             supplier={item}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            handleAddComment={handleAddComment}
+            setComment={setComment}
+            comment={comment}
           />
         )}
         contentContainerStyle={styles.listContainer}

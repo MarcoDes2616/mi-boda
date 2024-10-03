@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  Text,
-  View,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
   Linking,
   Alert,
-  Button,
 } from "react-native";
 import {
   fetchAllGuests,
@@ -15,7 +11,6 @@ import {
   createGuest,
   deleteGuest,
 } from "../api/guest_api.js";
-import { FontAwesome } from "@expo/vector-icons";
 import AddGuestModal from "../components/modals/AddGuestModal.jsx";
 import color from "../constants/color";
 import FloatingButton from "../components/general_components/FloatingButton.jsx";
