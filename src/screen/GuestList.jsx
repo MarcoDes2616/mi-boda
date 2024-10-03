@@ -21,6 +21,7 @@ import color from "../constants/color";
 import FloatingButton from "../components/general_components/FloatingButton.jsx";
 import Container from "../components/custon_components/Container.jsx";
 import ControlPanel from "../components/general_components/ControlPanel.jsx";
+import GuestCard from "../components/general_components/GuestCard.jsx";
 
 const GuestList = () => {
   const initialValues = {
@@ -96,67 +97,6 @@ const GuestList = () => {
     }
   };
 
-  const renderGuest = ({ item }) => (
-    <View style={styles.card}>
-      <View style={styles.header}>
-        <Text style={styles.name}>
-          {item.title?.title} {item.first_name} {item.last_name}
-        </Text>
-        <View style={styles.roleSection}>
-          <FontAwesome name="id-badge" size={16} color="#121212" />
-          <Text style={styles.role}>{item.role?.role_name || "Sin rol"}</Text>
-        </View>
-      </View>
-      {/* Sección de Contacto */}
-      <View style={styles.contactSection}>
-        <View style={styles.row}>
-          <View style={styles.contactInfo}>
-            <FontAwesome name="phone" size={20} color={color.oliveGreen} />
-            <Text style={styles.detail}>
-              {"  "}
-              {item.phone}
-            </Text>
-          </View>
-          <View style={styles.column}>
-            <TouchableOpacity onPress={() => handleWhatsApp(item.phone)}>
-              <FontAwesome name="whatsapp" size={24} color="green" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.contactInfo}>
-            <FontAwesome name="envelope" size={20} color={color.oliveGreen} />
-            {item.invitation_sent_at ? (
-              <Text style={styles.detail}>
-                {"  "}Invitado el:{" "}
-                {new Date(item.invitation_sent_at).toLocaleDateString()}
-              </Text>
-            ) : (
-              <Text style={styles.detail}>{"  "}Invitación sin enviar</Text>
-            )}
-          </View>
-          <View style={styles.column}>
-            <TouchableOpacity onPress={() => handleSendInvitation(item.id)}>
-              <FontAwesome name="send" size={24} color="blue" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-      {/* Botones de Acción */}
-      <View style={styles.actionsContainer}>
-        <View style={styles.barCode}>
-          <FontAwesome name="barcode" size={40} color={color.wine} />
-          <FontAwesome name="barcode" size={40} color={color.wine} />
-        </View>
-        <View style={styles.trash}>
-          <TouchableOpacity onPress={() => handleDeleteGuest(item.id)}>
-            <FontAwesome name="trash" size={24} color={color.sageGreen} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-  );
-
   const propsToModal = {
     modalVisible,
     setModalVisible,
@@ -171,7 +111,14 @@ const GuestList = () => {
       <FlatList
         data={guests}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={renderGuest}
+        renderItem={({ item }) => (
+          <GuestCard
+            item={item}
+            handleWhatsApp={handleWhatsApp}
+            handleSendInvitation={handleSendInvitation}
+            handleDeleteGuest={handleDeleteGuest}
+          />
+        )}
         contentContainerStyle={styles.list}
       />
       <AddGuestModal {...propsToModal} />
@@ -189,7 +136,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   list: {
-    paddingBottom: 20,
+    paddingBottom: 110,
   },
   barCode: {
     width: "85%",

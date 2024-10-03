@@ -20,7 +20,7 @@ const FloatingButton = ({ onPress, count }) => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 20,
+    bottom: 10,
     right: 20,
     zIndex: 10,
     backgroundColor: color.oliveGreen,
